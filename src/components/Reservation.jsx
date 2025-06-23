@@ -1,5 +1,4 @@
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
-import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -10,42 +9,33 @@ const Reservation = () => {
   const [email, setEmail] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
-  const [phone, setPhone] = useState(""); // Changed from 0 to ""
+  const [phone, setPhone] = useState("");
   const navigate = useNavigate();
 
-  const handleReservation = async (e) => {
-    e.preventDefault(); // Prevents page refresh
+  const handleReservation = (e) => {
+    e.preventDefault();
 
-    // Basic validation before sending request
+    // Simple frontend validation
     if (!firstName || !lastName || !email || !phone || !date || !time) {
       toast.error("All fields are required!");
       return;
     }
 
-    try {
-      const { data } = await axios.post(
-        "http://localhost:4000/api/v1/reservation/send",
-        { firstName, lastName, email, phone, date, time },
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
+    // Simulate API delay
+    setTimeout(() => {
+      toast.success("Reservation submitted successfully!");
 
-      toast.success(data.message);
-
-      // Reset form fields after successful submission
+      // Clear form
       setFirstName("");
       setLastName("");
-      setPhone("0");
       setEmail("");
-      setTime("");
+      setPhone("");
       setDate("");
+      setTime("");
 
-      navigate("/success");
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong!");
-    }
+      // Optional: Navigate or show success page
+      // navigate("/success");
+    }, 1000);
   };
 
   return (
@@ -59,7 +49,6 @@ const Reservation = () => {
             <h1>MAKE A RESERVATION</h1>
             <p>For Further Questions, Please Call</p>
 
-            {/* Form now correctly handles submission */}
             <form onSubmit={handleReservation}>
               <div>
                 <input
@@ -114,14 +103,13 @@ const Reservation = () => {
                   required
                 />
               </div>
-              <button type="submit" onClick={handleReservation}>
+              <button type="submit">
                 RESERVE NOW{" "}
                 <span>
                   <HiOutlineArrowNarrowRight />
                 </span>
               </button>
             </form>
-
           </div>
         </div>
       </div>
